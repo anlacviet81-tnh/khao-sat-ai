@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khảo sát kỹ năng AI</title>
+<meta name="description" content="Khảo sát kiến thức, kỹ năng AI trước khóa đào tạo">
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#14213d;--mute:#5b6b82;--line:#dbe3ee;--pri:#1a56db;--pri-ink:#fff;--pri-soft:#e8efff;--ok:#0f9d58;--bad:#d93025;--warn:#b26a00;
+--c0:#8a94a6;--c1:#1a8fd6;--c2:#0f9d58;--c3:#8e44ad;--r:14px}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1522;--card:#182032;--ink:#e8edf6;--mute:#9aa8bd;--line:#2a3550;--pri:#5b8cff;--pri-ink:#0b1020;--pri-soft:#1f2c4d}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 96px}
+header.top{background:linear-gradient(135deg,#1a56db,#6c3fd1);color:#fff;border-radius:var(--r);padding:22px 20px;margin-bottom:14px}
+header.top h1{margin:0 0 6px;font-size:1.35rem;line-height:1.3}
+header.top p{margin:0;opacity:.92;font-size:.95rem}
+.steps{display:flex;gap:6px;margin:14px 0 4px}
+.steps i{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.3)}
+.steps i.on{background:#fff}
+.steplbl{font-size:.82rem;opacity:.9}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:1.12rem}
+.card .sub{margin:0 0 14px;color:var(--mute);font-size:.92rem}
+label.f{display:block;font-weight:600;margin:14px 0 6px;font-size:.95rem}
+label.f .req{color:var(--bad)}
+.hint{color:var(--mute);font-weight:400;font-size:.85rem}
+input[type=text],input[type=tel],input[type=number],input[type=email],select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-offset:1px;border-color:transparent}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:var(--card)}
+.opt input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:var(--pri)}
+.opt:has(input:checked){border-color:var(--pri);background:var(--pri-soft)}
+.opt.unk{color:var(--mute);font-style:italic}
+.scale{display:flex;gap:8px}
+.scale label{flex:1;text-align:center;padding:10px 0;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:600}
+.scale input{display:none}
+.scale label:has(input:checked){background:var(--pri);color:var(--pri-ink);border-color:var(--pri)}
+.scale-cap{display:flex;justify-content:space-between;color:var(--mute);font-size:.8rem;margin-top:4px}
+.q{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+.q:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.q .qt{font-weight:600;margin-bottom:8px}
+.q .qn{display:inline-block;min-width:28px;color:var(--pri)}
+.err{color:var(--bad);font-size:.88rem;margin-top:6px;display:none}
+.err.show{display:block}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:10px 16px}
+.bar .in{max-width:720px;margin:0 auto;display:flex;gap:10px}
+button{font:inherit;font-weight:600;border-radius:10px;padding:12px 18px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.pri{background:var(--pri);color:var(--pri-ink);border-color:var(--pri);flex:1}
+button:disabled{opacity:.55;cursor:wait}
+.hide{display:none!important}
+.note{background:var(--pri-soft);border-radius:10px;padding:10px 12px;font-size:.9rem;color:var(--ink)}
+.loading{text-align:center;color:var(--mute);padding:30px 0}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--pri);border-radius:50%;animation:s 1s linear infinite;margin:0 auto 10px}
+@keyframes s{to{transform:rotate(360deg)}}
+/* Kết quả */
+.badge{border-radius:var(--r);padding:20px;color:#fff;text-align:center;margin-bottom:14px}
+.badge .lv{font-size:1.5rem;font-weight:800;margin:4px 0}
+.badge .grp{font-weight:600;opacity:.95}
+.score{font-size:2.6rem;font-weight:800;line-height:1}
+.meter{margin:10px 0}
+.meter .lb{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:4px}
+.meter .tr{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.meter .tr b{display:block;height:100%;background:var(--pri);border-radius:6px}
+ul.goi{margin:6px 0 0;padding-left:20px}
+ul.goi li{margin:4px 0}
+.small{font-size:.85rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1 id="tieuDe">Khảo sát kiến thức, kỹ năng AI</h1>
+    <p id="gioiThieu">Phiếu giúp Ban tổ chức xếp lớp phù hợp với trình độ và nhu cầu của từng người. Thời gian khoảng 7 phút.</p>
+    <div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
+    <div class="steplbl" id="stepLbl"></div>
+  </header>
+
+  <form id="frm" autocomplete="on" novalidate>
+  <!-- BƯỚC 1 -->
+  <section class="card step" data-step="1">
+    <h2>1. Thông tin người học</h2>
+    <p class="sub">Dùng để liên hệ, xếp lớp và mời tham gia các khóa học phù hợp.</p>
+    <label class="f" for="hoTen">Họ và tên <span class="req">*</span></label>
+    <input type="text" id="hoTen" name="hoTen" autocomplete="name" maxlength="80">
+    <div class="row2">
+      <div><label class="f" for="sdt">Số điện thoại (Zalo) <span class="req">*</span></label>
+        <input type="tel" id="sdt" name="sdt" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="09xx xxx xxx"></div>
+      <div><label class="f" for="namSinh">Năm sinh <span class="req">*</span></label>
+        <input type="number" id="namSinh" name="namSinh" inputmode="numeric" placeholder="VD: 1990"></div>
+    </div>
+    <div class="row2">
+      <div><label class="f" for="gioiTinh">Giới tính</label>
+        <select id="gioiTinh" name="gioiTinh"><option value="">— Chọn —</option><option>Nam</option><option>Nữ</option><option>Khác</option></select></div>
+      <div><label class="f" for="email">Email <span class="hint">(không bắt buộc)</span></label>
+        <input type="email" id="email" name="email" autocomplete="email" maxlength="80"></div>
+    </div>
+    <label class="f" for="donVi">Đơn vị công tác <span class="req">*</span></label>
+    <input type="text" id="donVi" name="donVi" list="dsDonVi" maxlength="120" autocomplete="organization">
+    <datalist id="dsDonVi"></datalist>
+    <div class="row2">
+      <div><label class="f" for="phongBan">Phòng / ban / bộ phận</label>
+        <input type="text" id="phongBan" name="phongBan" maxlength="120"></div>
+      <div><label class="f" for="chucVu">Chức vụ <span class="req">*</span></label>
+        <select id="chucVu" name="chucVu"></select></div>
+    </div>
+    <label class="f" for="linhVuc">Lĩnh vực công việc <span class="req">*</span></label>
+    <select id="linhVuc" name="linhVuc"></select>
+    <label class="f" for="moTaCV">Mô tả ngắn công việc chính đang làm</label>
+    <textarea id="moTaCV" name="moTaCV" maxlength="300" placeholder="VD: Tổng hợp báo cáo kết quả kinh doanh hằng tuần, soạn công văn…"></textarea>
+    <div class="err" id="err1"></div>
+  </section>
+
+  <!-- BƯỚC 2 -->
+  <section class="card step hide" data-step="2">
+    <h2>2. Thực tế sử dụng AI</h2>
+    <p class="sub">Chọn đúng với thực tế để được xếp lớp chính xác. Không có đáp án đúng/sai ở phần này.</p>
+    <label class="f">Bạn đã từng dùng công cụ AI nào? <span class="req">*</span> <span class="hint">(chọn nhiều)</span></label>
+    <div class="opts" id="congCu"></div>
+    <label class="f">Một ngày bạn dành bao nhiêu thời gian dùng AI cho công việc? <span class="req">*</span></label>
+    <div class="opts" id="gioDung"></div>
+    <label class="f">Bạn có dùng tài khoản AI trả phí không?</label>
+    <div class="opts" id="traPhi"></div>
+    <label class="f">Bạn tự đánh giá mức độ thành thạo AI của mình <span class="req">*</span></label>
+    <div class="scale" id="tuDanhGia"></div>
+    <div class="scale-cap"><span>1 – Chưa biết gì</span><span>5 – Rất thành thạo</span></div>
+    <label class="f">Những việc bạn ĐÃ TỰ LÀM ĐƯỢC với AI <span class="hint">(chọn tất cả việc đã làm được, bỏ trống nếu chưa)</span></label>
+    <div class="opts" id="kyNang"></div>
+    <div class="err" id="err2"></div>
+  </section>
+
+  <!-- BƯỚC 3 -->
+  <section class="card step hide" data-step="3">
+    <h2>3. Kiểm tra nhanh kiến thức AI</h2>
+    <p class="sub">12 câu trắc nghiệm, mỗi câu chọn 1 đáp án. Nếu chưa biết, hãy chọn "Chưa biết / không chắc" thay vì đoán, để kết quả xếp lớp sát thực tế.</p>
+    <div id="cauHoi"><div class="loading"><div class="spin"></div>Đang tải câu hỏi…</div></div>
+    <div class="err" id="err3"></div>
+  </section>
+
+  <!-- BƯỚC 4 -->
+  <section class="card step hide" data-step="4">
+    <h2>4. Nhu cầu đào tạo</h2>
+    <p class="sub">Giúp Ban tổ chức thiết kế nội dung sát với công việc của bạn.</p>
+    <label class="f">Bạn mong muốn học AI để giải quyết những việc nào? <span class="req">*</span> <span class="hint">(chọn nhiều)</span></label>
+    <div class="opts" id="mucTieu"></div>
+    <label class="f" for="mucTieuKhac">Mục tiêu khác (nếu có)</label>
+    <input type="text" id="mucTieuKhac" name="mucTieuKhac" maxlength="300">
+    <label class="f">Hình thức học mong muốn <span class="req">*</span></label>
+    <div class="opts" id="hinhThuc"></div>
+    <label class="f">Thời gian học thuận tiện <span class="hint">(chọn nhiều)</span></label>
+    <div class="opts" id="thoiGianHoc"></div>
+    <label class="f" for="deXuat">Đề xuất, mong muốn khác với khóa học</label>
+    <textarea id="deXuat" name="deXuat" maxlength="500"></textarea>
+    <p class="note">Thông tin của bạn chỉ dùng cho công tác tổ chức đào tạo. Nếu nộp lại bằng cùng số điện thoại, phiếu cũ sẽ được cập nhật.</p>
+    <div class="err" id="err4"></div>
+  </section>
+  </form>
+
+  <!-- KẾT QUẢ -->
+  <section id="ketQua" class="hide"></section>
+</div>
+
+<div class="bar" id="bar"><div class="in">
+  <button type="button" id="btnBack">← Quay lại</button>
+  <button type="button" class="pri" id="btnNext">Tiếp tục →</button>
+</div></div>
+
+<script>
+/* Địa chỉ API Apps Script (…/exec). Điền khi triển khai. */
+var API_URL = 'https://script.google.com/macros/s/AKfycbyLwpzf1bwJ_qdW9Nsthl02058PDe1nhaPXER3MeSYlbrQVl__JxGOmAl9lgojSgNq8wg/exec';
+
+var $ = function (id) { return document.getElementById(id); };
+var ND = null, buoc = 1, dangGui = false;
+var NHAN_BUOC = ['Thông tin người học', 'Thực tế sử dụng AI', 'Kiểm tra kiến thức', 'Nhu cầu đào tạo'];
+var MAU_CAP = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)'];
+var KHOA_NHAP = 'ksai_nhap_v1';
+
+function goi(fn, args) {
+  if (!API_URL) return Promise.reject(new Error('Trang chưa được cấu hình địa chỉ máy chủ (API_URL).'));
+  var lan = 0;
+  function mot() {
+    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args || [] }) })
+      .then(function (r) { if (!r.ok) throw new Error('Máy chủ đang bận (HTTP ' + r.status + ')'); return r.json(); })
+      .then(function (j) { if (!j.ok) { var e = new Error(j.error); e.logic = true; throw e; } return j.data; });
+  }
+  function thu() {
+    return mot().catch(function (e) {
+      if (!e.logic && lan < 3) { lan++; return new Promise(function (r) { setTimeout(r, 1200 * lan); }).then(thu); }
+      if (!e.logic) e.message = 'Không kết nối được máy chủ, vui lòng kiểm tra mạng và thử lại.';
+      throw e;
+    });
+  }
+  return thu();
+}
+
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function opts(el, name, list, multi, valFn) {
+  $(el).innerHTML = list.map(function (x, i) {
+    var v = valFn ? valFn(x, i) : x, t = Array.isArray(x) ? x[1] : x;
+    return '<label class="opt"><input type="' + (multi ? 'checkbox' : 'radio') + '" name="' + name + '" value="' + esc(v) + '"><span>' + esc(t) + '</span></label>';
+  }).join('');
+}
+function selectOpts(el, list) { $(el).innerHTML = '<option value="">— Chọn —</option>' + list.map(function (x) { return '<option>' + esc(x) + '</option>'; }).join(''); }
+function chon(name) { return Array.prototype.map.call(document.querySelectorAll('input[name="' + name + '"]:checked'), function (i) { return i.value; }); }
+
+function veNoiDung(nd) {
+  ND = nd;
+  if (nd.tieuDe) { $('tieuDe').textContent = nd.tieuDe; document.title = nd.tieuDe; }
+  if (nd.gioiThieu) $('gioiThieu').textContent = nd.gioiThieu;
+  $('dsDonVi').innerHTML = (nd.donVi || []).map(function (d) { return '<option value="' + esc(d) + '">'; }).join('');
+  selectOpts('chucVu', nd.chucVu); selectOpts('linhVuc', nd.linhVuc);
+  opts('congCu', 'congCu', nd.congCu, true);
+  opts('gioDung', 'gioDung', nd.gioDung, false);
+  opts('traPhi', 'traPhi', nd.traPhi, false);
+  $('tuDanhGia').innerHTML = [1, 2, 3, 4, 5].map(function (n) { return '<label><input type="radio" name="tuDanhGia" value="' + n + '">' + n + '</label>'; }).join('');
+  opts('kyNang', 'kyNang', nd.kyNang, true, function (x) { return x[0]; });
+  opts('mucTieu', 'mucTieu', nd.mucTieu, true, function (x) { return x[0]; });
+  opts('hinhThuc', 'hinhThuc', nd.hinhThuc, false);
+  opts('thoiGianHoc', 'thoiGianHoc', nd.thoiGianHoc, true);
+  $('cauHoi').innerHTML = nd.cauHoi.map(function (q, i) {
+    return '<div class="q"><div class="qt"><span class="qn">' + (i + 1) + '.</span>' + esc(q.hoi) + '</div><div class="opts">' +
+      q.pa.map(function (p, j) {
+        var unk = j === q.pa.length - 1;
+        return '<label class="opt' + (unk ? ' unk' : '') + '"><input type="radio" name="q' + i + '" value="' + j + '"><span>' + (unk ? '' : 'ABCD'[j] + '. ') + esc(p) + '</span></label>';
+      }).join('') + '</div></div>';
+  }).join('');
+  // "Chưa dùng công cụ nào" loại trừ các lựa chọn khác
+  var cc = document.querySelectorAll('input[name="congCu"]'), chua = cc[cc.length - 1];
+  Array.prototype.forEach.call(cc, function (i) { i.addEventListener('change', function () {
+    if (i === chua && i.checked) Array.prototype.forEach.call(cc, function (o) { if (o !== chua) o.checked = false; });
+    else if (i !== chua && i.checked) chua.checked = false;
+  }); });
+  khoiPhucNhap();
+}
+
+/* ---------- Lưu nháp trên máy (phòng khi tải lại trang) ---------- */
+function layDuLieu() {
+  var f = function (id) { return $(id).value.trim(); };
+  var d = { hoTen: f('hoTen'), sdt: f('sdt'), namSinh: f('namSinh'), gioiTinh: f('gioiTinh'), email: f('email'), donVi: f('donVi'),
+    phongBan: f('phongBan'), chucVu: f('chucVu'), linhVuc: f('linhVuc'), moTaCV: f('moTaCV'),
+    congCu: chon('congCu'), gioDung: chon('gioDung')[0] || '', traPhi: chon('traPhi')[0] || '', tuDanhGia: chon('tuDanhGia')[0] || '',
+    kyNang: chon('kyNang'), mucTieu: chon('mucTieu'), mucTieuKhac: f('mucTieuKhac'), hinhThuc: chon('hinhThuc')[0] || '',
+    thoiGianHoc: chon('thoiGianHoc'), deXuat: f('deXuat'), traLoi: [] };
+  if (ND) for (var i = 0; i < ND.cauHoi.length; i++) { var v = chon('q' + i)[0]; d.traLoi.push(v === undefined ? null : Number(v)); }
+  return d;
+}
+function luuNhap() { try { localStorage.setItem(KHOA_NHAP, JSON.stringify({ d: layDuLieu(), b: buoc })); } catch (e) {} }
+function khoiPhucNhap() {
+  var s; try { s = JSON.parse(localStorage.getItem(KHOA_NHAP) || 'null'); } catch (e) { s = null; }
+  if (!s || !s.d) return;
+  var d = s.d;
+  ['hoTen', 'sdt', 'namSinh', 'gioiTinh', 'email', 'donVi', 'phongBan', 'chucVu', 'linhVuc', 'moTaCV', 'mucTieuKhac', 'deXuat'].forEach(function (k) { if (d[k]) $(k).value = d[k]; });
+  function dat(name, vals) { (Array.isArray(vals) ? vals : [vals]).forEach(function (v) {
+    if (v === null || v === undefined || v === '') return;
+    var el = document.querySelector('input[name="' + name + '"][value="' + String(v).replace(/"/g, '\\"') + '"]'); if (el) el.checked = true; }); }
+  ['congCu', 'gioDung', 'traPhi', 'tuDanhGia', 'kyNang', 'mucTieu', 'hinhThuc', 'thoiGianHoc'].forEach(function (k) { dat(k, d[k]); });
+  (d.traLoi || []).forEach(function (v, i) { dat('q' + i, v); });
+}
+
+/* ---------- Kiểm tra từng bước ---------- */
+function kiemTra(b) {
+  var d = layDuLieu(), loi = '';
+  if (b === 1) {
+    var sdt = d.sdt.replace(/[\s.\-()]/g, '').replace(/^\+?84/, '0'), nam = new Date().getFullYear(), ns = Number(d.namSinh);
+    if (d.hoTen.length < 2) loi = 'Vui lòng nhập họ và tên.';
+    else if (!/^0\d{9}$/.test(sdt)) loi = 'Số điện thoại cần đủ 10 số, bắt đầu bằng 0.';
+    else if (!(ns >= nam - 80 && ns <= nam - 15)) loi = 'Vui lòng nhập năm sinh đúng (4 chữ số).';
+    else if (!d.donVi) loi = 'Vui lòng nhập đơn vị công tác.';
+    else if (!d.chucVu) loi = 'Vui lòng chọn chức vụ.';
+    else if (!d.linhVuc) loi = 'Vui lòng chọn lĩnh vực công việc.';
+  } else if (b === 2) {
+    if (!d.congCu.length) loi = 'Vui lòng chọn công cụ AI đã dùng (hoặc "Chưa dùng công cụ nào").';
+    else if (!d.gioDung) loi = 'Vui lòng chọn thời gian dùng AI mỗi ngày.';
+    else if (!d.tuDanhGia) loi = 'Vui lòng tự đánh giá mức độ thành thạo (1–5).';
+  } else if (b === 3) {
+    if (!ND) loi = 'Câu hỏi chưa tải xong, vui lòng chờ giây lát.';
+    else { var thieu = []; d.traLoi.forEach(function (v, i) { if (v === null) thieu.push(i + 1); });
+      if (thieu.length) loi = 'Bạn chưa trả lời câu: ' + thieu.join(', ') + '. Nếu chưa biết, hãy chọn "Chưa biết / không chắc".'; }
+  } else if (b === 4) {
+    if (!d.mucTieu.length && !d.mucTieuKhac) loi = 'Vui lòng chọn ít nhất một mục tiêu học.';
+    else if (!d.hinhThuc) loi = 'Vui lòng chọn hình thức học mong muốn.';
+  }
+  var e = $('err' + b); e.textContent = loi; e.classList.toggle('show', !!loi);
+  if (loi) e.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return !loi;
+}
+
+function denBuoc(b) {
+  buoc = b;
+  Array.prototype.forEach.call(document.querySelectorAll('.step'), function (s) { s.classList.toggle('hide', Number(s.dataset.step) !== b); });
+  Array.prototype.forEach.call($('steps').children, function (i, k) { i.classList.toggle('on', k < b); });
+  $('stepLbl').textContent = 'Bước ' + b + '/4 – ' + NHAN_BUOC[b - 1];
+  $('btnBack').classList.toggle('hide', b === 1);
+  $('btnNext').textContent = b === 4 ? 'Gửi phiếu khảo sát' : 'Tiếp tục →';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  luuNhap();
+}
+
+$('btnBack').onclick = function () { if (buoc > 1) denBuoc(buoc - 1); };
+$('btnNext').onclick = function () {
+  if (dangGui || !kiemTra(buoc)) return;
+  if (buoc < 4) return denBuoc(buoc + 1);
+  gui();
+};
+$('frm').addEventListener('change', luuNhap);
+$('frm').addEventListener('input', function () { clearTimeout(window.__t); window.__t = setTimeout(luuNhap, 400); });
+
+function gui() {
+  dangGui = true;
+  var btn = $('btnNext'); btn.disabled = true; btn.textContent = 'Đang gửi…';
+  goi('nopKhaoSat', [layDuLieu()]).then(function (kq) {
+    try { localStorage.removeItem(KHOA_NHAP); } catch (e) {}
+    hienKetQua(kq);
+  }).catch(function (e) {
+    var el = $('err4'); el.textContent = e.message; el.classList.add('show');
+    btn.disabled = false; btn.textContent = 'Gửi lại';
+  }).then(function () { dangGui = false; });
+}
+
+function meter(nhan, diem, max) {
+  return '<div class="meter"><div class="lb"><span>' + nhan + '</span><b>' + diem + '/' + max + '</b></div><div class="tr"><b style="width:' + Math.round(diem / max * 100) + '%"></b></div></div>';
+}
+function hienKetQua(k) {
+  $('frm').classList.add('hide'); $('bar').classList.add('hide');
+  $('steps').classList.add('hide'); $('stepLbl').textContent = 'Đã hoàn thành';
+  $('ketQua').innerHTML =
+    '<div class="badge" style="background:' + MAU_CAP[k.capSo] + '">' +
+      '<div>Cảm ơn ' + esc(k.hoTen) + '! Kết quả của bạn</div><div class="lv">' + esc(k.capDo) + '</div>' +
+      '<div class="grp">Xếp vào: ' + esc(k.nhom) + '</div></div>' +
+    '<div class="card"><div style="display:flex;align-items:baseline;gap:8px"><span class="score">' + k.tong + '</span><span class="small">/ 100 điểm</span></div>' +
+      meter('Kiến thức (' + k.soDung + '/' + k.tongCau + ' câu đúng)', k.diemKT, 60) + meter('Kỹ năng thực hành', k.diemKN, 30) + meter('Mức độ sử dụng', k.diemGio, 10) +
+      '<p class="small" style="margin:10px 0 0">' + esc(k.moTa) + '</p></div>' +
+    (k.goiY && k.goiY.length ? '<div class="card"><h2>Chủ đề phù hợp với bạn</h2><ul class="goi">' + k.goiY.map(function (g) { return '<li>' + esc(g) + '</li>'; }).join('') + '</ul></div>' : '') +
+    '<div class="card"><p class="small" style="margin:0">Mã phiếu: <b>' + esc(k.maPhieu) + '</b>' + (k.soLan > 1 ? ' · đã cập nhật lần ' + k.soLan : '') +
+      '. Ban tổ chức sẽ liên hệ qua Zalo để thông báo lịch học.</p></div>';
+  $('ketQua').classList.remove('hide');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+denBuoc(1);
+goi('layNoiDung').then(veNoiDung).catch(function (e) {
+  $('cauHoi').innerHTML = '<div class="err show">' + esc(e.message) + ' <button type="button" onclick="location.reload()">Tải lại</button></div>';
+  $('err1').textContent = e.message; $('err1').classList.add('show');
+});
+</script>
+</body>
+</html>
