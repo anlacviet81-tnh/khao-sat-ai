@@ -142,7 +142,7 @@ function intro() {
     '<h1 style="margin-top:14px">' + esc(ND.tieuDe) + '</h1>' +
     (ND.gioiThieu ? '<p class="lead">' + esc(ND.gioiThieu) + '</p>' : '') +
     '<div class="facts"><div><b>' + ND.q.length + '</b><span>câu hỏi</span></div><div><b>5\'</b><span>khoảng thời gian</span></div><div><b>4</b><span>cộng đồng học tập</span></div></div>' +
-    '<ol class="sec"><li><b>' + esc(ND.parts.I) + '</b>: độ tuổi, vị trí công việc</li><li><b>' + esc(ND.parts.A) + '</b>: đã dùng gì, dùng bao lâu</li>' +
+    '<ol class="sec"><li><b>' + esc(ND.parts.I) + '</b>: độ tuổi, lĩnh vực, vị trí công việc</li><li><b>' + esc(ND.parts.A) + '</b>: đã dùng gì, dùng bao lâu</li>' +
     '<li><b>' + esc(ND.parts.B) + '</b>: hỏi AI thế nào cho đúng, an toàn</li><li><b>' + esc(ND.parts.C) + '</b>: AI đang giúp được bao nhiêu</li></ol>' +
     '<p class="hint">Kết quả chỉ gửi riêng cho giảng viên. Trong nhóm cộng đồng, anh/chị chỉ giới thiệu tên và đơn vị.</p>' +
     '<div class="nav"><button class="btn" id="go">' + (S.ans.some(function (a, i) { return answered(i); }) ? 'Làm tiếp phần đang dở' : 'Bắt đầu') + '</button></div>';
@@ -203,7 +203,7 @@ function contact() {
     '<p class="hint">Nhập số điện thoại dùng Zalo hoặc Viettel Tammi, hoặc email (ít nhất một). Thông tin này chỉ giảng viên giữ, dùng để gửi kết quả, xếp lớp và mời các khóa học phù hợp.</p>' +
     '<div class="stack" style="margin-top:18px">' +
     '<div><label class="f" for="nm">Họ và tên</label><input id="nm" type="text" autocomplete="name" maxlength="80" value="' + esc(S.name) + '"></div>' +
-    '<div><label class="f" for="un">Đơn vị công tác</label><input id="un" type="text" maxlength="150" placeholder="Ví dụ: UBND xã Tân Ninh, Trường TH Lê Lợi" value="' + esc(S.unit) + '"></div>' +
+    '<div><label class="f" for="un">Đơn vị công tác</label><input id="un" type="text" maxlength="150" placeholder="Ví dụ: Công ty ABC, UBND phường X, Trường THPT Y" value="' + esc(S.unit) + '"></div>' +
     '<div><label class="f" for="ph">Số điện thoại dùng Zalo / Viettel Tammi</label><input id="ph" type="tel" inputmode="numeric" autocomplete="tel" maxlength="16" placeholder="Ví dụ: 0912345678" value="' + esc(S.phone) + '"></div>' +
     '<div><label class="f" for="em">Hoặc email</label><input id="em" type="email" autocomplete="email" maxlength="100" value="' + esc(S.email) + '"></div>' +
     '<div><label class="f" for="jb">Công việc chính đang làm <span class="hint">(không bắt buộc)</span></label><textarea id="jb" maxlength="300" placeholder="Ví dụ: văn thư, tổng hợp báo cáo tuần, soạn công văn">' + esc(S.job) + '</textarea></div>' +
