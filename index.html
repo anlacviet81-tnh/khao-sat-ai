@@ -241,6 +241,9 @@ function gui() {
 function result() {
   var k = KQ, nhom = k.group.split(' · ')[0];
   var gv = k.gv || {};
+  // Tên nền tảng theo link nhóm trong CauHinh (Zalo, Tammi, Facebook...)
+  var nen = /zalo\.me/i.test(k.link) ? 'Zalo' : /tammi/i.test(k.link) ? 'Viettel Tammi' : /facebook\.com|fb\.com/i.test(k.link) ? 'Facebook' : '';
+  var tren = nen ? ' trên ' + nen : '';
   var gvLines = [gv.name && 'Giảng viên: <span>' + esc(gv.name) + '</span>', gv.zalo && 'Zalo: <span>' + esc(gv.zalo) + '</span>', gv.tammi && 'Viettel Tammi: <span>' + esc(gv.tammi) + '</span>'].filter(Boolean);
   app.innerHTML =
     '<div class="level"><span class="badge">' + esc(k.group) + '</span>' +
@@ -251,9 +254,9 @@ function result() {
       return '<div class="row"><div class="lbl"><span>' + esc(k.parts[p]) + '</span><b>' + k.g[p] + '/' + k.max[p] + '</b></div><div class="track"><i class="' + (pct < 50 ? 'low' : '') + '" style="width:' + Math.max(pct, 3) + '%"></i></div></div>';
     }).join('') + '</div></div>' +
     '<p class="done"><b>✓ Đã gửi kết quả cho giảng viên.</b> Mã phiếu ' + esc(k.maPhieu) + (k.soLan > 1 ? ' (cập nhật lần ' + k.soLan + ')' : '') + '.</p>' +
-    '<h3>Vào cộng đồng ' + esc(nhom) + ' trên Viettel Tammi</h3>' +
+    '<h3>Vào cộng đồng ' + esc(nhom) + tren + '</h3>' +
     '<p>Quét mã QR <b>' + esc(nhom) + '</b> đang chiếu trên màn hình giảng viên' + (k.link ? ', hoặc bấm nút dưới đây' : '') + '. Khi vào nhóm, chỉ giới thiệu họ tên và đơn vị.</p>' +
-    (k.link ? '<a class="btn" href="' + esc(k.link) + '" target="_blank" rel="noopener">Vào ' + esc(nhom) + ' trên Tammi</a>' : '') +
+    (k.link ? '<a class="btn" href="' + esc(k.link) + '" target="_blank" rel="noopener">Vào ' + esc(nhom) + tren + '</a>' : '') +
     (gvLines.length ? '<div class="contact">' + gvLines.join('') + '</div>' : '') +
     '<h3>Công cụ và việc nên làm ngay</h3>' +
     '<div class="stack">' + k.tools.map(function (t) { return '<div class="tool"><b>' + esc(t[0]) + '</b><p>' + esc(t[1]) + '</p></div>'; }).join('') + '</div>' +
